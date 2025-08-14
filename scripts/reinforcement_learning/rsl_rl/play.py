@@ -213,9 +213,9 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
             #         1.53, 0.987, -0.106, -0.991, -0.575, -0.0303, -0.612, 0.708, 
             #         0.55, 0.603, -0.798, 0.409, 0.704, -0.133, 0.217, -1.42, 
             #         -0.833]], device="cuda")
-            print(obs, "obs")
+            # print(obs, "obs")
             actions = policy(obs)
-            print(actions, "actions")
+            # print(actions, "actions")
             # actions = torch.zeros_like(actions)
             # env stepping
             obs, _, _, _ = env.step(actions)
