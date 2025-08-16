@@ -71,11 +71,11 @@ RSL-RL:
 ```bash
 # Train
 python scripts/reinforcement_learning/rsl_rl/train.py --task=<ENV_NAME> --headless
-python scripts/reinforcement_learning/rsl_rl/train.py --task=RobotLab-Isaac-Velocity-Rough-Deeprobotics-M20-v0 --headless
+python scripts/reinforcement_learning/rsl_rl/train.py --task=RobotLab-Isaac-Velocity-Rough-Deeprobotics-Lite3-v0 --headless
 
 # Play
 python scripts/reinforcement_learning/rsl_rl/play.py --task=<ENV_NAME>
-python scripts/reinforcement_learning/rsl_rl/play.py --task=RobotLab-Isaac-Velocity-Rough-Deeprobotics-M20-v0 --num_envs=1
+python scripts/reinforcement_learning/rsl_rl/play.py --task=RobotLab-Isaac-Velocity-Rough-Deeprobotics-Lite3-v0 --num_envs=10
 ```
 
 CusRL (**Experimental**:​​ Hydra not supported yet):
