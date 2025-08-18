@@ -103,7 +103,7 @@ from isaaclab.utils.io import dump_pickle, dump_yaml
 from isaaclab_rl.skrl import SkrlVecEnvWrapper
 from isaaclab_tasks.utils.hydra import hydra_task_config
 
-import robot_lab  # noqa: F401
+import rl_training  # noqa: F401
 
 # PLACEHOLDER: Extension template (do not remove this comment)
 

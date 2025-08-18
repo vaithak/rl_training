@@ -37,7 +37,7 @@ import omni.kit.app
 
 from isaaclab.utils.assets import check_file_path
 
-from robot_lab.assets.utils.usd_converter import mjcf_to_usd, urdf_to_usd, xacro_to_usd  # noqa: F401
+from rl_training.assets.utils.usd_converter import mjcf_to_usd, urdf_to_usd, xacro_to_usd  # noqa: F401
 
 
 def main():

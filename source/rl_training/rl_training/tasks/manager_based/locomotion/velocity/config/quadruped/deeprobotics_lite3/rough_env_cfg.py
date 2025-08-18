@@ -6,12 +6,12 @@
 
 from isaaclab.utils import configclass
 
-from robot_lab.tasks.manager_based.locomotion.velocity.velocity_env_cfg import LocomotionVelocityRoughEnvCfg
+from rl_training.tasks.manager_based.locomotion.velocity.velocity_env_cfg import LocomotionVelocityRoughEnvCfg
 
 ##
 # Pre-defined configs
 ##
-from robot_lab.assets.deeprobotics import DEEPROBOTICS_LITE3_CFG  # isort: skip
+from rl_training.assets.deeprobotics import DEEPROBOTICS_LITE3_CFG  # isort: skip
 
 
 @configclass

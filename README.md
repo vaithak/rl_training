@@ -32,7 +32,7 @@
 - Using a python interpreter that has Isaac Lab installed, install the library
 
   ```bash
-  python -m pip install -e source/robot_lab
+  python -m pip install -e source/rl_training
   ```
 
 - Verify that the extension is correctly installed by running the following command to print all the available environments in the extension:
@@ -45,14 +45,14 @@
 
 <summary>Setup as Omniverse Extension (Optional, click to expand)</summary>
 
-We provide an example UI extension that will load upon enabling your extension defined in `source/robot_lab/robot_lab/ui_extension_example.py`.
+We provide an example UI extension that will load upon enabling your extension defined in `source/rl_training/rl_training/ui_extension_example.py`.
 
 To enable your extension, follow these steps:
 
 1. **Add the search path of your repository** to the extension manager:
     - Navigate to the extension manager using `Window` -> `Extensions`.
     - Click on the **Hamburger Icon** (☰), then go to `Settings`.
-    - In the `Extension Search Paths`, enter the absolute path to `robot_lab/source`
+    - In the `Extension Search Paths`, enter the absolute path to `rl_trainingb/source`
     - If not already present, in the `Extension Search Paths`, enter the path that leads to Isaac Lab's extension directory directory (`IsaacLab/source`)
     - Click on the **Hamburger Icon** (☰), then click `Refresh`.
 
@@ -129,7 +129,7 @@ python scripts/reinforcement_learning/cusrl/play.py --task=<ENV_NAME>
 This repository supports direct import of URDF, XACRO, and MJCF robot models without requiring pre-conversion to USD format.
 
 ```python
-from robot_lab.assets.utils.usd_converter import (  # noqa: F401
+from rl_training.assets.utils.usd_converter import (  # noqa: F401
     mjcf_to_usd,
     spawn_from_lazy_usd,
     urdf_to_usd,
@@ -185,7 +185,7 @@ itself. However, its various instances are included in directories within the en
 This looks like as follows:
 
 ```tree
-source/robot_lab/tasks/manager_based/locomotion/
+source/rl_training/tasks/manager_based/locomotion/
 ├── __init__.py
 └── velocity
     ├── config
@@ -198,7 +198,7 @@ source/robot_lab/tasks/manager_based/locomotion/
     └── velocity_env_cfg.py  # <- this is the base task configuration
 ```
 
-The environments are then registered in the `source/robot_lab/tasks/manager_based/locomotion/velocity/config/unitree_a1/__init__.py`:
+The environments are then registered in the `source/rl_training/tasks/manager_based/locomotion/velocity/config/unitree_a1/__init__.py`:
 
 ```python
 gym.register(
@@ -243,7 +243,7 @@ In some VsCode versions, the indexing of part of the extensions is missing. In t
 ```json
 {
     "python.analysis.extraPaths": [
-        "${workspaceFolder}/source/robot_lab",
+        "${workspaceFolder}/source/rl_training",
         "/<path-to-isaac-lab>/source/isaaclab",
         "/<path-to-isaac-lab>/source/isaaclab_assets",
         "/<path-to-isaac-lab>/source/isaaclab_mimic",

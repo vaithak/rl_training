@@ -63,7 +63,7 @@ from isaaclab.utils.dict import print_dict
 from isaaclab_tasks.utils.hydra import hydra_task_config  # noqa: F401
 from isaaclab_tasks.utils.parse_cfg import load_cfg_from_registry
 
-import robot_lab.tasks  # noqa: F401
+import rl_training.tasks  # noqa: F401
 
 torch.backends.cuda.matmul.allow_tf32 = True
 torch.backends.cudnn.allow_tf32 = True

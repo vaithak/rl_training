@@ -34,7 +34,7 @@ import gymnasium as gym
 import textwrap
 from prettytable import PrettyTable
 
-import robot_lab.tasks  # noqa: F401
+import rl_training.tasks  # noqa: F401
 
 
 def main():

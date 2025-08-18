@@ -82,7 +82,7 @@ from isaaclab_rl.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlVecEnvWrapper, expor
 from isaaclab_tasks.utils import get_checkpoint_path
 from isaaclab_tasks.utils.hydra import hydra_task_config
 
-import robot_lab.tasks  # noqa: F401
+import rl_training.tasks  # noqa: F401
 
 
 @hydra_task_config(args_cli.task, "rsl_rl_cfg_entry_point")

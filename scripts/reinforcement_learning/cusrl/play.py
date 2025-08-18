@@ -70,7 +70,7 @@ from isaaclab_tasks.utils import parse_env_cfg
 from isaaclab_tasks.utils.hydra import hydra_task_config  # noqa: F401
 from isaaclab_tasks.utils.parse_cfg import load_cfg_from_registry
 
-import robot_lab.tasks  # noqa: F401
+import rl_training.tasks  # noqa: F401
 
 
 class CameraFollowPlayerHook(cusrl.Player.Hook):

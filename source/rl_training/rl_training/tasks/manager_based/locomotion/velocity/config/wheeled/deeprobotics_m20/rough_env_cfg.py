@@ -8,8 +8,8 @@ from isaaclab.managers import RewardTermCfg as RewTerm
 from isaaclab.managers import SceneEntityCfg
 from isaaclab.utils import configclass
 
-import robot_lab.tasks.manager_based.locomotion.velocity.mdp as mdp
-from robot_lab.tasks.manager_based.locomotion.velocity.velocity_env_cfg import (
+import rl_training.tasks.manager_based.locomotion.velocity.mdp as mdp
+from rl_training.tasks.manager_based.locomotion.velocity.velocity_env_cfg import (
     ActionsCfg,
     LocomotionVelocityRoughEnvCfg,
     RewardsCfg,
@@ -18,7 +18,7 @@ from robot_lab.tasks.manager_based.locomotion.velocity.velocity_env_cfg import (
 ##
 # Pre-defined configs
 ##
-from robot_lab.assets.deeprobotics import DEEPROBOTICS_M20_CFG  # isort: skip
+from rl_training.assets.deeprobotics import DEEPROBOTICS_M20_CFG  # isort: skip
 
 
 @configclass

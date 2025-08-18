@@ -1,6 +1,6 @@
-# robot_lab Developers and Contributors
+# RL Training Developers and Contributors
 
-This is the official list of robot_lab Project developers and contributors.
+This is the official list of RL Training Project developers and contributors.
 
 To see the full list of contributors, please check the revision history in the source control.
 
@@ -11,20 +11,13 @@ Guidelines for modifications:
 
 ## Developers
 
-* Ziqi Fan
+* [Bo Peng](https://www.linkedin.com/in/bo-peng-647068272/)
 
 ## Contributors
 
-* [Chengrui Zhu](https://github.com/chengruiz)
-* [DDT Robot](https://directdrive.com)
-* [Deep Robotics](https://www.deeprobotics.cn/en)
-* [Magiclab](https://www.magiclab.top/)
-* [RoboParty](https://roboparty.cn/)
-* [Yankai Xiang](https://github.com/cmjang)
-* [Zhenbiao Huang](https://github.com/legubiao)
-* [Zhihao Liu](https://github.com/Luo1imasi)
-* [Zsibot](https://www.zsibot.com)
+* [Ziqi Fan](https://github.com/fan-ziqi)
+* Zhongliang Pan
 
 ## Acknowledgements
 
-* Shiyu Zhou
+

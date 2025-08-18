@@ -4,7 +4,7 @@
 # Copyright (c) 2024-2025 Ziqi Fan
 # SPDX-License-Identifier: Apache-2.0
 
-"""Installation script for the 'robot_lab' python package."""
+"""Installation script for the 'rl_training' python package."""
 
 import os
 import toml
@@ -32,8 +32,8 @@ INSTALL_REQUIRES = [
 
 # Installation operation
 setup(
-    name="robot_lab",
-    packages=["robot_lab"],
+    name="rl_training",
+    packages=["rl_training"],
     author=EXTENSION_TOML_DATA["package"]["author"],
     maintainer=EXTENSION_TOML_DATA["package"]["maintainer"],
     url=EXTENSION_TOML_DATA["package"]["repository"],

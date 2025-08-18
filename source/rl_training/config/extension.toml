@@ -11,8 +11,8 @@ title = "RL Extension Library for Robots, Based on IsaacLab."
 author = "Ziqi Fan"
 maintainer = "Ziqi Fan"
 description="RL Extension Library for Robots, Based on IsaacLab."
-repository = "https://github.com/fan-ziqi/robot_lab.git"
-keywords = ["extension", "robot_lab", "isaaclab"]
+repository = "https://github.com/DeepRoboticsLab/RL_Training.git"
+keywords = ["extension", "rl_training", "isaaclab"]
 
 [dependencies]
 "isaaclab" = {}
@@ -23,7 +23,7 @@ keywords = ["extension", "robot_lab", "isaaclab"]
 # NOTE: Add additional dependencies here
 
 [[python.module]]
-name = "robot_lab"
+name = "rl_training"
 
 [isaaclab_settings]
 # TODO: Uncomment and list any apt dependencies here.

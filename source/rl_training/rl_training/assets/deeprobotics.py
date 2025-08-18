@@ -8,8 +8,8 @@ import isaaclab.sim as sim_utils
 from isaaclab.actuators import DCMotorCfg, IdealPDActuatorCfg
 from isaaclab.assets.articulation import ArticulationCfg
 
-from robot_lab.assets import ISAACLAB_ASSETS_DATA_DIR
-from robot_lab.assets.utils.usd_converter import (  # noqa: F401
+from rl_training.assets import ISAACLAB_ASSETS_DATA_DIR
+from rl_training.assets.utils.usd_converter import (  # noqa: F401
     mjcf_to_usd,
     spawn_from_lazy_usd,
     urdf_to_usd,
