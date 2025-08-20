@@ -13,7 +13,7 @@ from . import agents
 ##
 
 gym.register(
-    id="RobotLab-Isaac-Velocity-Flat-Deeprobotics-M20-v0",
+    id="Flat-Deeprobotics-M20-v0",
     entry_point="isaaclab.envs:ManagerBasedRLEnv",
     disable_env_checker=True,
     kwargs={
@@ -24,7 +24,7 @@ gym.register(
 )
 
 gym.register(
-    id="RobotLab-Isaac-Velocity-Rough-Deeprobotics-M20-v0",
+    id="Rough-Deeprobotics-M20-v0",
     entry_point="isaaclab.envs:ManagerBasedRLEnv",
     disable_env_checker=True,
     kwargs={
