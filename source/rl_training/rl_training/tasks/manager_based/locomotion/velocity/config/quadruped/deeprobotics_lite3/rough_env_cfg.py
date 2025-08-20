@@ -18,6 +18,13 @@ from rl_training.assets.deeprobotics import DEEPROBOTICS_LITE3_CFG  # isort: ski
 class DeeproboticsLite3RoughEnvCfg(LocomotionVelocityRoughEnvCfg):
     base_link_name = "TORSO"
     foot_link_name = ".*_FOOT"
+    link_names = [
+        "TORSO",
+        "FL_HIP", "FL_THIGH", "FL_SHANK", "FL_FOOT",
+        "FR_HIP", "FR_THIGH", "FR_SHANK", "FR_FOOT",
+        "HL_HIP", "HL_THIGH", "HL_SHANK", "HL_FOOT",
+        "HR_HIP", "HR_THIGH", "HR_SHANK", "HR_FOOT",
+    ]
     # fmt: off
     joint_names = [
         "FL_HipX_joint", "FL_HipY_joint", "FL_Knee_joint",
@@ -70,20 +77,23 @@ class DeeproboticsLite3RoughEnvCfg(LocomotionVelocityRoughEnvCfg):
                 "yaw": (-0.1, 0.1),
             },
         }
-        self.events.randomize_rigid_body_mass.params["asset_cfg"].body_names = [self.base_link_name]
+        self.events.randomize_base_link_mass.params["asset_cfg"].body_names = [self.base_link_name]
         self.events.randomize_com_positions.params["asset_cfg"].body_names = [self.base_link_name]
         self.events.randomize_apply_external_force_torque.params["asset_cfg"].body_names = [self.base_link_name]
 
+        self.events.randomize_rigid_body_mass.params["asset_cfg"].body_names = self.link_names
+        self.events.randomize_actuator_gains.params["asset_cfg"].joint_names = self.joint_names
+
         # ------------------------------Rewards------------------------------
-        # General
+        # General        
         self.rewards.is_terminated.weight = 0
 
         # Root penalties
         self.rewards.lin_vel_z_l2.weight = -2.0
         self.rewards.ang_vel_xy_l2.weight = -0.05
         self.rewards.flat_orientation_l2.weight = 0
-        self.rewards.base_height_l2.weight = 0
-        self.rewards.base_height_l2.params["target_height"] = 0.35
+        self.rewards.base_height_l2.weight = -1.0
+        self.rewards.base_height_l2.params["target_height"] = 0.36
         self.rewards.base_height_l2.params["asset_cfg"].body_names = [self.base_link_name]
         self.rewards.body_lin_acc_l2.weight = 0
         self.rewards.body_lin_acc_l2.params["asset_cfg"].body_names = [self.base_link_name]
@@ -116,13 +126,38 @@ class DeeproboticsLite3RoughEnvCfg(LocomotionVelocityRoughEnvCfg):
         # Velocity-tracking rewards
         self.rewards.track_lin_vel_xy_exp.weight = 3.0
         self.rewards.track_ang_vel_z_exp.weight = 1.5
+        # class rewards(LeggedRobotCfg.rewards):
+        # soft_dof_pos_limit = 0.9
+        # base_height_target = 0.36
+        # still_all = True
+        # only_positive_rewards = True
+        # pitch_roll_factor = [1, 1]
 
+        # class scales(LeggedRobotCfg.rewards.scales):
+        #     lin_vel_z = -2.0 # -6.0
+        #     ang_vel_xy = -0.05 # -1.
+        #     orientation = -0.2 # -7.0
+        #     base_height = -1.0 # -1.0
+        #     torques = -0.00001 # -0.0002
+        #     dof_vel = -0.0
+        #     dof_acc = -2.5e-7 # -1.25e-07
+        #     action_rate = -0.01 # -0.0
+        #     # target_smoothness = -0.01 # -0.01
+        #     collision = -1.0
+        #     termination = -0.0
+        #     # power = -2.5e-5
+        #     dof_pos_limits = -10.0 # -10.0
+        #     tracking_lin_vel = 1.0 # 2.0
+        #     tracking_ang_vel = 0.5 # 1.0
+        #     feet_air_time = 1.0
+        #     stumble = -0.0 # -0.5
+        #     stand_still = -0.05 # -0.3
+        #     feet_velocity = -0.05 # -0.2
+        #     episode_length = 0.0 # 0.1
         # Others
         self.rewards.feet_air_time.weight = 1.0
         self.rewards.feet_air_time.params["threshold"] = 0.5
         self.rewards.feet_air_time.params["sensor_cfg"].body_names = [self.foot_link_name]
-        self.rewards.feet_air_time_variance.weight = -1.0
-        self.rewards.feet_air_time_variance.params["sensor_cfg"].body_names = [self.foot_link_name]
         self.rewards.feet_contact.weight = 0
         self.rewards.feet_contact.params["sensor_cfg"].body_names = [self.foot_link_name]
         self.rewards.feet_contact_without_cmd.weight = 0.1
@@ -135,7 +170,7 @@ class DeeproboticsLite3RoughEnvCfg(LocomotionVelocityRoughEnvCfg):
         self.rewards.feet_height.weight = 0
         self.rewards.feet_height.params["target_height"] = 0.05
         self.rewards.feet_height.params["asset_cfg"].body_names = [self.foot_link_name]
-        self.rewards.feet_height_body.weight = -5.0
+        self.rewards.feet_height_body.weight = 0
         self.rewards.feet_height_body.params["target_height"] = -0.2
         self.rewards.feet_height_body.params["asset_cfg"].body_names = [self.foot_link_name]
         self.rewards.feet_gait.weight = 0.5
@@ -155,6 +190,6 @@ class DeeproboticsLite3RoughEnvCfg(LocomotionVelocityRoughEnvCfg):
         self.curriculum.command_levels = None
 
         # ------------------------------Commands------------------------------
-        # self.commands.base_velocity.ranges.lin_vel_x = (-1.5, 1.5)
-        # self.commands.base_velocity.ranges.lin_vel_y = (-0.8, 0.8)
-        # self.commands.base_velocity.ranges.ang_vel_z = (-1.5, 1.5)
+        self.commands.base_velocity.ranges.lin_vel_x = (-1.5, 1.5)
+        self.commands.base_velocity.ranges.lin_vel_y = (-0.8, 0.8)
+        self.commands.base_velocity.ranges.ang_vel_z = (-1.5, 1.5)

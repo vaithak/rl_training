@@ -59,6 +59,13 @@ class DeeproboticsM20RoughEnvCfg(LocomotionVelocityRoughEnvCfg):
     base_link_name = "base_link"
     foot_link_name = ".*_wheel"
 
+    link_names = [
+        "base_link", 
+        "fl_hipx", "fl_hipy", "fl_knee", "fl_wheel",
+        "fr_hipx", "fr_hipy", "fr_knee", "fr_wheel",
+        "hl_hipx", "hl_hipy", "hl_knee", "hl_wheel",
+        "hr_hipx", "hr_hipy", "hr_knee", "hr_wheel",
+    ]
     # fmt: off
     leg_joint_names = [
         "fl_hipx_joint", "fl_hipy_joint", "fl_knee_joint",
@@ -127,10 +134,13 @@ class DeeproboticsM20RoughEnvCfg(LocomotionVelocityRoughEnvCfg):
                 "yaw": (-0.5, 0.5),
             },
         }
-        self.events.randomize_rigid_body_mass.params["asset_cfg"].body_names = [self.base_link_name]
+        self.events.randomize_base_link_mass.params["asset_cfg"].body_names = [self.base_link_name]
         self.events.randomize_com_positions.params["asset_cfg"].body_names = [self.base_link_name]
         self.events.randomize_apply_external_force_torque.params["asset_cfg"].body_names = [self.base_link_name]
-
+        
+        self.events.randomize_rigid_body_mass.params["asset_cfg"].body_names = self.link_names
+        self.events.randomize_actuator_gains.params["asset_cfg"].joint_names = self.joint_names
+        
         # ------------------------------Rewards------------------------------
         # General
         self.rewards.is_terminated.weight = 0

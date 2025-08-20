@@ -208,14 +208,6 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
         # run everything in inference mode
         with torch.inference_mode():
             # agent stepping
-            # obs = torch.tensor([[-3.21, -0.233, 0.343, -0.00136, 0.0244, -1, 0, 0, 
-            #         0, -0.0526, 0.32, -0.138, -0.00296, 0.348, -0.164, -0.0585, 
-            #         -0.345, 0.142, -0.0069, -0.339, 0.151, 0, 0, 0, 
-            #         0, -3.28, 0.729, -2.67, -3.42, 4.24, -5.83, -4.09, 
-            #         -3.85, 3.06, -3.96, -3.23, 4.11, 3.04, -7.13, 9.41, 
-            #         1.53, 0.987, -0.106, -0.991, -0.575, -0.0303, -0.612, 0.708, 
-            #         0.55, 0.603, -0.798, 0.409, 0.704, -0.133, 0.217, -1.42, 
-            #         -0.833]], device="cuda")
             # print(obs, "obs")
             actions = policy(obs)
             # print(actions, "actions")

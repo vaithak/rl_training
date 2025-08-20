@@ -370,7 +370,7 @@ USD file generated at: /home/ubuntu/third_party/robot_lab/source/robot_lab/data/
 | Index  | Name                           |
 +--------+--------------------------------+
 |   0    | randomize_rigid_body_material  |
-|   1    | randomize_rigid_body_mass      |
+|   1    | randomize_base_link_mass      |
 |   2    | randomize_rigid_body_inertia   |
 |   3    | randomize_com_positions        |
 +--------+--------------------------------+
