@@ -11,10 +11,10 @@
 
 **RL_Training** is a RL training library for deeprobotics robots, based on IsaacLab. The table below lists all available environments:
 
-| Category   | Robot Model         | Environment Name (ID)                                      | Screenshot |
-|------------|---------------------|------------------------------------------------------------|------------|
-| **Quadruped** | [Deeprobotics Lite3](https://www.deeprobotics.cn/robot/index/product1.html) | RobotLab-Isaac-Velocity-Rough-Deeprobotics-Lite3-v0 | <img src="./docs/imgs/deeprobotics_lite3.png" alt="Lite3" width="75"> 
-| **Wheeled** | [Deeprobotics M20](https://www.deeprobotics.cn/robot/index/lynx.html) | RobotLab-Isaac-Velocity-Rough-Deeprobotics-M20-v0 | <img src="./docs/imgs/deeprobotics_m20.png" alt="deeprobotics_m20" width="75"> 
+| Robot Model         | Environment Name (ID)                                      | Screenshot |
+|---------------------|------------------------------------------------------------|------------|
+| [Deeprobotics Lite3](https://www.deeprobotics.cn/robot/index/product1.html) | RobotLab-Isaac-Velocity-Rough-Deeprobotics-Lite3-v0 | <img src="./docs/imgs/deeprobotics_lite3.png" alt="Lite3" width="150">
+| [Deeprobotics M20](https://www.deeprobotics.cn/robot/index/lynx.html) | RobotLab-Isaac-Velocity-Rough-Deeprobotics-M20-v0 | <img src="./docs/imgs/deeprobotics_m20.png" alt="deeprobotics_m20" width="150">
 
 > [!NOTE]
 > If you want to deploy policies in mujoco or real robots, please use the corresponding deploy repo in [Deep Robotics Github Center](https://github.com/DeepRoboticsLab).
@@ -64,30 +64,25 @@ To enable your extension, follow these steps:
 
 ## Try examples
 
-You can use the following commands to run all environments:
-
-RSL-RL:
+Deeprobotics Lite3:
 
 ```bash
 # Train
-python scripts/reinforcement_learning/rsl_rl/train.py --task=<ENV_NAME> --headless
 python scripts/reinforcement_learning/rsl_rl/train.py --task=RobotLab-Isaac-Velocity-Rough-Deeprobotics-Lite3-v0 --headless
 
 # Play
-python scripts/reinforcement_learning/rsl_rl/play.py --task=<ENV_NAME>
 python scripts/reinforcement_learning/rsl_rl/play.py --task=RobotLab-Isaac-Velocity-Rough-Deeprobotics-Lite3-v0 --num_envs=10
 ```
 
-CusRL (**Experimental**:​​ Hydra not supported yet):
+Deeprobotics M20:
 
 ```bash
 # Train
-python scripts/reinforcement_learning/cusrl/train.py --task=<ENV_NAME> --headless
+python scripts/reinforcement_learning/rsl_rl/train.py --task=RobotLab-Isaac-Velocity-Rough-Deeprobotics-M20-v0 --headless
 
 # Play
-python scripts/reinforcement_learning/cusrl/play.py --task=<ENV_NAME>
+python scripts/reinforcement_learning/rsl_rl/play.py --task=RobotLab-Isaac-Velocity-Rough-Deeprobotics-M20-v0 --num_envs=10
 ```
-
 
 > [!NOTE]
 > If you want to control a **SINGLE ROBOT** with the keyboard during playback, add `--keyboard` at the end of the play script.
@@ -123,106 +118,6 @@ python scripts/reinforcement_learning/cusrl/play.py --task=<ENV_NAME>
     ```bash
     python -m torch.distributed.run --nproc_per_node=2 --nnodes=2 --node_rank=1 --rdzv_id=123 --rdzv_backend=c10d --rdzv_endpoint=ip_of_master_machine:5555 scripts/reinforcement_learning/rsl_rl/train.py --task=<ENV_NAME> --headless --distributed
     ```
-
-## Add your own robot
-
-This repository supports direct import of URDF, XACRO, and MJCF robot models without requiring pre-conversion to USD format.
-
-```python
-from rl_training.assets.utils.usd_converter import (  # noqa: F401
-    mjcf_to_usd,
-    spawn_from_lazy_usd,
-    urdf_to_usd,
-    xacro_to_usd,
-)
-
-YOUR_ROBOT_CFG = ArticulationCfg(
-    spawn=sim_utils.UsdFileCfg(
-        # for urdf
-        func=spawn_from_lazy_usd,
-        usd_path=urdf_to_usd(  # type: ignore
-            file_path=f"{ISAACLAB_ASSETS_DATA_DIR}/Robots/your_robot/your_robot.urdf",
-            merge_joints=True,
-            fix_base=False,
-        ),
-        # for xacro
-        func=spawn_from_lazy_usd,
-        usd_path=xacro_to_usd(  # type: ignore
-            file_path=f"{ISAACLAB_ASSETS_DATA_DIR}/Robots/your_robot/your_robot.xacro",
-            merge_joints=True,
-            fix_base=False,
-        ),
-        # for mjcf
-        func=spawn_from_lazy_usd,
-        usd_path=mjcf_to_usd(  # type: ignore
-            file_path=f"{ISAACLAB_ASSETS_DATA_DIR}/Robots/your_robot/your_robot.xml",
-            import_sites=True,
-            fix_base=False,
-        ),
-        # ... other configuration parameters ...
-    ),
-    # ... other configuration parameters ...
-)
-```
-
-Check your model import compatibility using:
-
-```bash
-python scripts/tools/check_robot.py {urdf,mjcf,xacro} path_to_your_model_file
-```
-
-Using the core framework developed as part of Isaac Lab, we provide various learning environments for robotics research.
-These environments follow the `gym.Env` API from OpenAI Gym version `0.21.0`. The environments are registered using
-the Gym registry.
-
-Each environment's name is composed of `Isaac-<Task>-<Robot>-v<X>`, where `<Task>` indicates the skill to learn
-in the environment, `<Robot>` indicates the embodiment of the acting agent, and `<X>` represents the version of
-the environment (which can be used to suggest different observation or action spaces).
-
-The environments are configured using either Python classes (wrapped using `configclass` decorator) or through
-YAML files. The template structure of the environment is always put at the same level as the environment file
-itself. However, its various instances are included in directories within the environment directory itself.
-This looks like as follows:
-
-```tree
-source/rl_training/tasks/manager_based/locomotion/
-├── __init__.py
-└── velocity
-    ├── config
-    │   └── unitree_a1
-    │       ├── agent  # <- this is where we store the learning agent configurations
-    │       ├── __init__.py  # <- this is where we register the environment and configurations to gym registry
-    │       ├── flat_env_cfg.py
-    │       └── rough_env_cfg.py
-    ├── __init__.py
-    └── velocity_env_cfg.py  # <- this is the base task configuration
-```
-
-The environments are then registered in the `source/rl_training/tasks/manager_based/locomotion/velocity/config/unitree_a1/__init__.py`:
-
-```python
-gym.register(
-    id="RobotLab-Isaac-Velocity-Flat-Unitree-A1-v0",
-    entry_point="isaaclab.envs:ManagerBasedRLEnv",
-    disable_env_checker=True,
-    kwargs={
-        "env_cfg_entry_point": f"{__name__}.flat_env_cfg:UnitreeA1FlatEnvCfg",
-        "rsl_rl_cfg_entry_point": f"{agents.__name__}.rsl_rl_ppo_cfg:UnitreeA1FlatPPORunnerCfg",
-        "cusrl_cfg_entry_point": f"{agents.__name__}.cusrl_ppo_cfg:UnitreeA1FlatTrainerCfg",
-    },
-)
-
-gym.register(
-    id="RobotLab-Isaac-Velocity-Rough-Unitree-A1-v0",
-    entry_point="isaaclab.envs:ManagerBasedRLEnv",
-    disable_env_checker=True,
-    kwargs={
-        "env_cfg_entry_point": f"{__name__}.rough_env_cfg:UnitreeA1RoughEnvCfg",
-        "rsl_rl_cfg_entry_point": f"{agents.__name__}.rsl_rl_ppo_cfg:UnitreeA1RoughPPORunnerCfg",
-        "cusrl_cfg_entry_point": f"{agents.__name__}.cusrl_ppo_cfg:UnitreeA1RoughTrainerCfg",
-    },
-)
-```
 
 ## Tensorboard
 
