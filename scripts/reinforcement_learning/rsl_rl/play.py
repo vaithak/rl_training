@@ -208,7 +208,7 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
         # run everything in inference mode
         with torch.inference_mode():
             # agent stepping
-            print(obs, "obs")
+            # print(obs, "obs")
             actions = policy(obs)
             # print(actions, "actions")
             # actions = torch.zeros_like(actions)

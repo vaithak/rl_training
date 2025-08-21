@@ -83,7 +83,6 @@ class DeeproboticsLite3RoughEnvCfg(LocomotionVelocityRoughEnvCfg):
 
         self.events.randomize_rigid_body_mass.params["asset_cfg"].body_names = self.link_names
         self.events.randomize_actuator_gains.params["asset_cfg"].joint_names = self.joint_names
-        
         # scale down the terrains because the robot is small
         self.scene.terrain.terrain_generator.sub_terrains["boxes"].grid_height_range = (0.025, 0.1)
         self.scene.terrain.terrain_generator.sub_terrains["random_rough"].noise_range = (0.01, 0.06)
@@ -166,4 +165,7 @@ class DeeproboticsLite3RoughEnvCfg(LocomotionVelocityRoughEnvCfg):
         self.commands.base_velocity.ranges.lin_vel_x = (-1.5, 1.5)
         self.commands.base_velocity.ranges.lin_vel_y = (-0.8, 0.8)
         self.commands.base_velocity.ranges.ang_vel_z = (-1.5, 1.5)
+
+        # ------------------------------Curriculums------------------------------
+        self.curriculum.command_levels = None
 
