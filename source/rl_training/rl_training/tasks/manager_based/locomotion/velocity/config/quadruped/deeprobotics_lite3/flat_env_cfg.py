@@ -20,6 +20,7 @@ class DeeproboticsLite3FlatEnvCfg(DeeproboticsLite3RoughEnvCfg):
         # change terrain to flat
         self.scene.terrain.terrain_type = "plane"
         self.scene.terrain.terrain_generator = None
+        # self.rewards.base_height_l2.weight = -50.0
         # no height scan
         self.scene.height_scanner = None
         self.observations.policy.height_scan = None

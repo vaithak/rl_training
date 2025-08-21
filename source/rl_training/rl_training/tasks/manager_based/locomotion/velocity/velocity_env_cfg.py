@@ -113,7 +113,7 @@ class CommandsCfg:
         resampling_time_range=(10.0, 10.0),
         rel_standing_envs=0.02,
         rel_heading_envs=1.0,
-        heading_command=True,
+        heading_command=False,
         heading_control_stiffness=0.5,
         debug_vis=True,
         ranges=mdp.UniformThresholdVelocityCommandCfg.Ranges(
@@ -668,6 +668,13 @@ class TerminationsCfg:
         params={"sensor_cfg": SceneEntityCfg("contact_forces", body_names=""), "threshold": 1.0},
     )
 
+    root_height_below_minimum = DoneTerm(
+        func=mdp.root_height_below_minimum,
+        params={"asset_cfg": SceneEntityCfg("robot"), 
+                "minimum_height": 0.27},
+    )
+    
+
 
 @configclass
 class CurriculumCfg:
@@ -682,6 +689,15 @@ class CurriculumCfg:
             "range_multiplier": (0.1, 1.0),
         },
     )
+
+    command_levels = CurrTerm(
+        func=mdp.command_levels_vel,
+        params={
+            "reward_term_name": "track_ang_vel_z_exp",
+            "range_multiplier": (0.1, 1.0),
+        },
+    )
+
 
 
 ##
