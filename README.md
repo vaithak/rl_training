@@ -1,4 +1,4 @@
-# RL_Training
+rl_training
 
 [![IsaacSim](https://img.shields.io/badge/IsaacSim-5.0.0-silver.svg)](https://docs.omniverse.nvidia.com/isaacsim/latest/overview.html)
 [![Isaac Lab](https://img.shields.io/badge/IsaacLab-2.2.0-silver)](https://isaac-sim.github.io/IsaacLab)
@@ -9,7 +9,7 @@
 
 ## Overview
 
-**RL_Training** is a RL training library for deeprobotics robots, based on IsaacLab. The table below lists all available environments:
+**rl_training** is a RL training library for deeprobotics robots, based on IsaacLab. The table below lists all available environments:
 
 | Robot Model         | Environment Name (ID)                                      | Screenshot |
 |---------------------|------------------------------------------------------------|------------|
@@ -26,7 +26,7 @@
 - Clone this repository separately from the Isaac Lab installation (i.e. outside the `IsaacLab` directory):
 
   ```bash
-  git clone https://github.com/DeepRoboticsLab/RL_Training.git
+  git clone https://github.com/DeepRoboticsLab/rl_training.git
   ```
 
 - Using a python interpreter that has Isaac Lab installed, install the library
