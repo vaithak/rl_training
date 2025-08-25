@@ -1,11 +1,8 @@
-# Copyright (c) 2025 Deep Robotics
-# SPDX-License-Identifier: BSD-3-Clause
-
 # Copyright (c) 2024-2025 Ziqi Fan
 # SPDX-License-Identifier: Apache-2.0
 
 import isaaclab.sim as sim_utils
-from isaaclab.actuators import DCMotorCfg, IdealPDActuatorCfg, DelayedPDActuatorCfg
+from isaaclab.actuators import DCMotorCfg, DelayedPDActuatorCfg
 from isaaclab.assets.articulation import ArticulationCfg
 
 from rl_training.assets import ISAACLAB_ASSETS_DATA_DIR
@@ -54,10 +51,11 @@ DEEPROBOTICS_LITE3_CFG = ArticulationCfg(
             joint_names_expr=[".*_Hip[X,Y]_joint"],
             effort_limit=24.0,
             velocity_limit=26.2,
-            stiffness=20.0,
-            damping=0.7,
+            stiffness=30.0,
+            damping=1.0,
             friction=0.0,
             armature=0.0,
+            min_delay=0,
             max_delay=5,
         ),
         "Knee": DelayedPDActuatorCfg(
@@ -68,6 +66,7 @@ DEEPROBOTICS_LITE3_CFG = ArticulationCfg(
             damping=1.0,
             friction=0.0,
             armature=0.0,
+            min_delay=0,
             max_delay=5,
         ),
     },

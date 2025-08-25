@@ -1,6 +1,3 @@
-# Copyright (c) 2025 Deep Robotics
-# SPDX-License-Identifier: BSD-3-Clause
-
 # Copyright (c) 2024-2025 Ziqi Fan
 # SPDX-License-Identifier: Apache-2.0
 
@@ -33,6 +30,9 @@ parser.add_argument(
 )
 parser.add_argument("--num_envs", type=int, default=None, help="Number of environments to simulate.")
 parser.add_argument("--task", type=str, default=None, help="Name of the task.")
+parser.add_argument(
+    "--agent", type=str, default="rsl_rl_cfg_entry_point", help="Name of the RL agent configuration entry point."
+)
 parser.add_argument("--seed", type=int, default=None, help="Seed used for the environment")
 parser.add_argument(
     "--use_pretrained_checkpoint",
@@ -85,7 +85,7 @@ from isaaclab_tasks.utils.hydra import hydra_task_config
 import rl_training.tasks  # noqa: F401
 
 
-@hydra_task_config(args_cli.task, "rsl_rl_cfg_entry_point")
+@hydra_task_config(args_cli.task, args_cli.agent)
 def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agent_cfg: RslRlOnPolicyRunnerCfg):
     """Play with RSL-RL agent."""
     task_name = args_cli.task.split(":")[-1]
@@ -198,7 +198,7 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
     )
 
     dt = env.unwrapped.step_dt
-
+    # print(dt, "dt")
     # reset environment
     obs, _ = env.get_observations()
     timestep = 0
@@ -208,9 +208,7 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
         # run everything in inference mode
         with torch.inference_mode():
             # agent stepping
-            # print(obs, "obs")
             actions = policy(obs)
-            # print(actions, "actions")
             # actions = torch.zeros_like(actions)
             # env stepping
             obs, _, _, _ = env.step(actions)

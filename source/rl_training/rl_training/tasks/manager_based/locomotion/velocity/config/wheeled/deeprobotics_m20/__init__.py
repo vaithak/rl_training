@@ -1,6 +1,3 @@
-# Copyright (c) 2025 Deep Robotics
-# SPDX-License-Identifier: BSD-3-Clause
-
 # Copyright (c) 2024-2025 Ziqi Fan
 # SPDX-License-Identifier: Apache-2.0
 
@@ -13,7 +10,7 @@ from . import agents
 ##
 
 gym.register(
-    id="Flat-Deeprobotics-M20-v0",
+    id="RobotLab-Isaac-Velocity-Flat-Deeprobotics-M20-v0",
     entry_point="isaaclab.envs:ManagerBasedRLEnv",
     disable_env_checker=True,
     kwargs={
@@ -24,7 +21,7 @@ gym.register(
 )
 
 gym.register(
-    id="Rough-Deeprobotics-M20-v0",
+    id="RobotLab-Isaac-Velocity-Rough-Deeprobotics-M20-v0",
     entry_point="isaaclab.envs:ManagerBasedRLEnv",
     disable_env_checker=True,
     kwargs={

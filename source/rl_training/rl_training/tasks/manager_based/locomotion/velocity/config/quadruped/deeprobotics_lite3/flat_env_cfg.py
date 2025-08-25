@@ -1,6 +1,3 @@
-# Copyright (c) 2025 Deep Robotics
-# SPDX-License-Identifier: BSD-3-Clause
-
 # Copyright (c) 2024-2025 Ziqi Fan
 # SPDX-License-Identifier: Apache-2.0
 
@@ -16,15 +13,14 @@ class DeeproboticsLite3FlatEnvCfg(DeeproboticsLite3RoughEnvCfg):
         super().__post_init__()
 
         # override rewards
-        self.rewards.base_height_l2.params["sensor_cfg"] = None
+        # self.rewards.base_height_l2.params["sensor_cfg"] = None
         # change terrain to flat
         self.scene.terrain.terrain_type = "plane"
         self.scene.terrain.terrain_generator = None
-        # self.rewards.base_height_l2.weight = -50.0
         # no height scan
-        self.scene.height_scanner = None
+        # self.scene.height_scanner = None
         self.observations.policy.height_scan = None
-        self.observations.critic.height_scan = None
+        # self.observations.critic.height_scan = None
         # no terrain curriculum
         self.curriculum.terrain_levels = None
 

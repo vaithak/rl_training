@@ -1,6 +1,3 @@
-# Copyright (c) 2025 Deep Robotics
-# SPDX-License-Identifier: BSD-3-Clause
-
 # Copyright (c) 2024-2025 Ziqi Fan
 # SPDX-License-Identifier: Apache-2.0
 
@@ -113,7 +110,7 @@ class CommandsCfg:
         resampling_time_range=(10.0, 10.0),
         rel_standing_envs=0.02,
         rel_heading_envs=1.0,
-        heading_command=False,
+        heading_command=True,
         heading_control_stiffness=0.5,
         debug_vis=True,
         ranges=mdp.UniformThresholdVelocityCommandCfg.Ranges(
@@ -273,18 +270,6 @@ class EventCfg:
             "dynamic_friction_range": (0.3, 0.8),
             "restitution_range": (0.0, 0.4),
             "num_buckets": 1024,
-            "make_consistent": True
-        },
-    )
-
-    randomize_base_link_mass = EventTerm(
-        func=mdp.randomize_rigid_body_mass,
-        mode="startup",
-        params={
-            "asset_cfg": SceneEntityCfg("robot", body_names=""),
-            "mass_distribution_params": (-1.0, 3.0),
-            "operation": "add",
-            "recompute_inertia": True
         },
     )
 
@@ -293,9 +278,9 @@ class EventCfg:
         mode="startup",
         params={
             "asset_cfg": SceneEntityCfg("robot", body_names=""),
-            "mass_distribution_params": (0.85, 1.15),
+            "mass_distribution_params": (0.7, 1.3),
             "operation": "scale",
-            "recompute_inertia": True
+            "recompute_inertia": True,
         },
     )
 
@@ -314,7 +299,7 @@ class EventCfg:
         mode="startup",
         params={
             "asset_cfg": SceneEntityCfg("robot", body_names=".*"),
-            "com_range": {"x": (-0.05, 0.05), "y": (-0.05, 0.05), "z": (-0.05, 0.05)},
+            "com_range": {"x": (-0.02, 0.02), "y": (-0.02, 0.02), "z": (-0.02, 0.02)},
         },
     )
 
@@ -344,8 +329,8 @@ class EventCfg:
         mode="reset",
         params={
             "asset_cfg": SceneEntityCfg("robot", joint_names=".*"),
-            "stiffness_distribution_params": (0.85, 1.15),
-            "damping_distribution_params": (0.85, 1.15),
+            "stiffness_distribution_params": (0.7, 1.3),
+            "damping_distribution_params": (0.7, 1.3),
             "operation": "scale",
             "distribution": "uniform",
         },
@@ -413,6 +398,12 @@ class RewardsCfg:
         func=mdp.joint_acc_l2, weight=0.0, params={"asset_cfg": SceneEntityCfg("robot", joint_names=".*")}
     )
 
+    joint_deviation_l1 = RewTerm(
+            func=mdp.joint_deviation_l1,
+            weight=0.0,
+            params={"asset_cfg": SceneEntityCfg("robot", joint_names=".*")},
+        )
+    
     def create_joint_deviation_l1_rewterm(self, attr_name, weight, joint_names_pattern):
         rew_term = RewTerm(
             func=mdp.joint_deviation_l1,
@@ -510,7 +501,7 @@ class RewardsCfg:
     )
     action_rate_l2 = RewTerm(func=mdp.action_rate_l2, weight=0.0)
     # smoothness_1 = RewTerm(func=mdp.smoothness_1, weight=0.0)  # Same as action_rate_l2
-    # smoothness_2 = RewTerm(func=mdp.smoothness_2, weight=0.0)  # Unvaliable now
+    smoothness_2 = RewTerm(func=mdp.smoothness_2, weight=0.0)  # Unvaliable now
 
     # Contact sensor
     undesired_contacts = RewTerm(
@@ -603,6 +594,15 @@ class RewardsCfg:
         },
     )
 
+    stand_still = RewTerm(
+        func=mdp.stand_still_joint_deviation_l1,
+        weight=0,
+        params={
+            "command_name": "base_velocity",
+            "asset_cfg": SceneEntityCfg("robot", joint_names=""),
+        },
+    ) # negetive
+
     feet_height = RewTerm(
         func=mdp.feet_height,
         weight=0.0,
@@ -668,12 +668,10 @@ class TerminationsCfg:
         params={"sensor_cfg": SceneEntityCfg("contact_forces", body_names=""), "threshold": 1.0},
     )
 
-    root_height_below_minimum = DoneTerm(
-        func=mdp.root_height_below_minimum,
-        params={"asset_cfg": SceneEntityCfg("robot"), 
-                "minimum_height": 0.27},
-    )
+    bad_orientation_2 = DoneTerm(func=mdp.bad_orientation_2)
     
+
+
 
 
 @configclass
@@ -689,15 +687,6 @@ class CurriculumCfg:
             "range_multiplier": (0.1, 1.0),
         },
     )
-
-    command_levels = CurrTerm(
-        func=mdp.command_levels_vel,
-        params={
-            "reward_term_name": "track_ang_vel_z_exp",
-            "range_multiplier": (0.1, 1.0),
-        },
-    )
-
 
 
 ##

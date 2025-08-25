@@ -1,6 +1,3 @@
-# Copyright (c) 2025 Deep Robotics
-# SPDX-License-Identifier: BSD-3-Clause
-
 # Copyright (c) 2024-2025 Ziqi Fan
 # SPDX-License-Identifier: Apache-2.0
 
@@ -25,8 +22,6 @@ def joint_pos_rel_without_wheel(
     # extract the used quantities (to enable type-hinting)
     asset: Articulation = env.scene[asset_cfg.name]
     joint_pos_rel = asset.data.joint_pos[:, asset_cfg.joint_ids] - asset.data.default_joint_pos[:, asset_cfg.joint_ids]
-    # print("asset.data.joint_names", asset.data.joint_names)
-    # print("asset.data.default_joint_pos", asset.data.default_joint_pos)
     joint_pos_rel[:, wheel_asset_cfg.joint_ids] = 0
     return joint_pos_rel
 

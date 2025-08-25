@@ -1,6 +1,3 @@
-# Copyright (c) 2025 Deep Robotics
-# SPDX-License-Identifier: BSD-3-Clause
-
 # Copyright (c) 2024-2025 Ziqi Fan
 # SPDX-License-Identifier: Apache-2.0
 
@@ -55,7 +52,7 @@ def main():
     index = 0
     # acquire all Isaac environments names
     for task_spec in gym.registry.values():
-        if "Deeprobotics" in task_spec.id:
+        if "RobotLab" in task_spec.id:
             # wrap long text in each column before adding it to the table
             task_name = textwrap.fill(task_spec.id, max_width)
             entry_point = textwrap.fill(task_spec.entry_point, max_width)
