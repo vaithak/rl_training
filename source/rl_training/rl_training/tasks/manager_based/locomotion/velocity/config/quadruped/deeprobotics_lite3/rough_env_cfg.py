@@ -46,12 +46,11 @@ class DeeproboticsLite3RoughEnvCfg(LocomotionVelocityRoughEnvCfg):
         self.scene.height_scanner.pattern_cfg.resolution = 0.07 #  = GridPatternCfg(resolution=0.07, size=[1.6, 1.0]),
 
         # ------------------------------Observations------------------------------
-        self.observations.policy.base_lin_vel.scale = 2.0
+        self.observations.policy.base_lin_vel = None
+        self.observations.policy.height_scan = None
         self.observations.policy.base_ang_vel.scale = 0.25
         self.observations.policy.joint_pos.scale = 1.0
         self.observations.policy.joint_vel.scale = 0.05
-        self.observations.policy.base_lin_vel = None
-        self.observations.policy.height_scan = None
         self.observations.policy.joint_pos.params["asset_cfg"].joint_names = self.joint_names
         self.observations.policy.joint_vel.params["asset_cfg"].joint_names = self.joint_names
 
@@ -64,19 +63,19 @@ class DeeproboticsLite3RoughEnvCfg(LocomotionVelocityRoughEnvCfg):
         # ------------------------------Events------------------------------
         self.events.randomize_reset_base.params = {
             "pose_range": {
-                "x": (-0.0, 0.0),
-                "y": (-0.0, 0.0),
+                "x": (-1.0, 1.0),
+                "y": (-1.0, 1.0),
                 "z": (0.0, 0.0),
-                "roll": (0.0, 0.0),
-                "pitch": (0.0, 0.0),
+                "roll": (-0.3, 0.3),
+                "pitch": (-0.3, 0.3),
                 "yaw": (-3.14, 3.14),
             },
             "velocity_range": {
-                "x": (-0.0, 0.0),
-                "y": (-0.0, 0.0),
-                "z": (-0.0, 0.0),
-                "roll": (-0.0, 0.0),
-                "pitch": (-0.0, 0.0),
+                "x": (-0.2, 0.2),
+                "y": (-0.2, 0.2),
+                "z": (-0.2, 0.2),
+                "roll": (-0.05, 0.05),
+                "pitch": (-0.05, 0.05),
                 "yaw": (-0.0, 0.0),
             },
         }
@@ -86,7 +85,6 @@ class DeeproboticsLite3RoughEnvCfg(LocomotionVelocityRoughEnvCfg):
         self.events.randomize_apply_external_force_torque = None
         self.events.randomize_push_robot = None
         self.events.randomize_actuator_gains.params["asset_cfg"].joint_names = self.joint_names
-
 
         # self.events.randomize_apply_external_force_torque.params["force_range"] = (-10.0, 10.0)
         # self.events.randomize_apply_external_force_torque.params["torque_range"] = (-5.0, 5.0)
@@ -135,7 +133,7 @@ class DeeproboticsLite3RoughEnvCfg(LocomotionVelocityRoughEnvCfg):
         # self.rewards.joint_pos_penalty.weight = -0.1
         # self.rewards.joint_pos_penalty.params["joint_names"] = [".*HipX.*"]
 
-        self.rewards.flat_orientation_l2.weight = -0.5
+        self.rewards.flat_orientation_l2.weight = -5.0
 
 
         # If the weight of rewards is 0, set rewards to None

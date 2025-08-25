@@ -118,7 +118,7 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
         env_cfg.terminations.time_out = None
         env_cfg.commands.base_velocity.debug_vis = False
         config = Se2KeyboardCfg(
-            v_x_sensitivity=env_cfg.commands.base_velocity.ranges.lin_vel_x[1],
+            v_x_sensitivity=env_cfg.commands.base_velocity.ranges.lin_vel_x[1]/2,
             v_y_sensitivity=env_cfg.commands.base_velocity.ranges.lin_vel_y[1],
             omega_z_sensitivity=env_cfg.commands.base_velocity.ranges.ang_vel_z[1],
         )
