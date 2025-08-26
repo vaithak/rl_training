@@ -359,7 +359,36 @@ def action_sync(env: ManagerBasedRLEnv, asset_cfg: SceneEntityCfg, joint_groups:
 #     reward *= torch.norm(env.command_manager.get_command(command_name)[:, :2], dim=1) > 0.1
 #     # print(torch.norm(env.command_manager.get_command(command_name)[:, :2], dim=1), "command norm")
 #     reward *= torch.clamp(-env.scene["robot"].data.projected_gravity_b[:, 2], 0, 0.7) / 0.7
-#     return reward
+    # return reward
+
+# def feet_air_time(
+#     env: ManagerBasedRLEnv,
+#     asset_cfg: SceneEntityCfg,
+#     sensor_cfg: SceneEntityCfg,
+#     mode_time: float,
+#     velocity_threshold: float,
+# ) -> torch.Tensor:
+#     """Reward longer feet air and contact time."""
+#     # extract the used quantities (to enable type-hinting)
+#     contact_sensor: ContactSensor = env.scene.sensors[sensor_cfg.name]
+#     asset: Articulation = env.scene[asset_cfg.name]
+#     if contact_sensor.cfg.track_air_time is False:
+#         raise RuntimeError("Activate ContactSensor's track_air_time!")
+#     # compute the reward
+#     current_air_time = contact_sensor.data.current_air_time[:, sensor_cfg.body_ids]
+#     current_contact_time = contact_sensor.data.current_contact_time[:, sensor_cfg.body_ids]
+
+#     t_max = torch.max(current_air_time, current_contact_time)
+#     t_min = torch.clip(t_max, max=mode_time)
+#     stance_cmd_reward = torch.clip(current_contact_time - current_air_time, -mode_time, mode_time)
+#     cmd = torch.norm(env.command_manager.get_command("base_velocity"), dim=1).unsqueeze(dim=1).expand(-1, 4)
+#     body_vel = torch.linalg.norm(asset.data.root_lin_vel_b[:, :2], dim=1).unsqueeze(dim=1).expand(-1, 4)
+#     reward = torch.where(
+#         torch.logical_or(cmd > 0.0, body_vel > velocity_threshold),
+#         torch.where(t_max < mode_time, t_min, 0),
+#         stance_cmd_reward,
+#     )
+#     return torch.sum(reward, dim=1)
 
 
 def feet_air_time_positive_biped(env, command_name: str, threshold: float, sensor_cfg: SceneEntityCfg) -> torch.Tensor:
@@ -395,8 +424,12 @@ def feet_air_time_variance_penalty(env: ManagerBasedRLEnv, sensor_cfg: SceneEnti
     reward = torch.var(torch.clip(last_air_time, max=0.5), dim=1) + torch.var(
         torch.clip(last_contact_time, max=0.5), dim=1
     )
+    # print(last_air_time, "last air time")
+    # print(last_contact_time, "last contact time")
     # reward *= torch.clamp(-env.scene["robot"].data.projected_gravity_b[:, 2], 0, 0.7) / 0.7
     return reward
+
+
 
 
 def feet_contact(
@@ -608,6 +641,7 @@ def smoothness_2(env: ManagerBasedRLEnv) -> torch.Tensor:
     diff = torch.square(env.action_manager.action - 2 * env.action_manager.prev_action + env.action_manager.prev_prev_action)
     diff = diff * (env.action_manager.prev_action[:, :] != 0)  # ignore first step
     diff = diff * (env.action_manager.prev_prev_action[:, :] != 0)  # ignore second step
+    # print(torch.sum(diff, dim=1), "smoothness l2")
     return torch.sum(diff, dim=1)
 
 

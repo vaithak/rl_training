@@ -232,6 +232,7 @@ class UsdConverter:
                         ),
                         target_type=joint_target_type,
                     ),
+                    replace_cylinders_with_capsules=True,
                 )
 
                 UrdfConverter(converter_cfg)
