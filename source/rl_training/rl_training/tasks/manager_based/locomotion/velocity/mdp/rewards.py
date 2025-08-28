@@ -637,13 +637,13 @@ def feet_slide(
 
 # def joint_acc_l2_new(env: ManagerBasedRLEnv) -> torch.Tensor:
 
-def smoothness_2(env: ManagerBasedRLEnv) -> torch.Tensor:
-    # Penalize changes in actions
-    diff = torch.square(env.action_manager.action - 2 * env.action_manager.prev_action + env.action_manager.prev_prev_action)
-    diff = diff * (env.action_manager.prev_action[:, :] != 0)  # ignore first step
-    diff = diff * (env.action_manager.prev_prev_action[:, :] != 0)  # ignore second step
-    # print(torch.sum(diff, dim=1), "smoothness l2")
-    return torch.sum(diff, dim=1)
+# def smoothness_2(env: ManagerBasedRLEnv) -> torch.Tensor:
+#     # Penalize changes in actions
+#     diff = torch.square(env.action_manager.action - 2 * env.action_manager.prev_action + env.action_manager.prev_prev_action)
+#     diff = diff * (env.action_manager.prev_action[:, :] != 0)  # ignore first step
+#     diff = diff * (env.action_manager.prev_prev_action[:, :] != 0)  # ignore second step
+#     # print(torch.sum(diff, dim=1), "smoothness l2")
+#     return torch.sum(diff, dim=1)
 
 
 def upward(env: ManagerBasedRLEnv, asset_cfg: SceneEntityCfg = SceneEntityCfg("robot")) -> torch.Tensor:
