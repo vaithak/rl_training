@@ -94,7 +94,7 @@ class DeeproboticsLite3RoughEnvCfg(LocomotionVelocityRoughEnvCfg):
         self.scene.terrain.terrain_generator.sub_terrains["random_rough"].noise_step = 0.01
 
         # ------------------------------Rewards------------------------------
-        self.rewards.action_rate_l2.weight = -0.01
+        self.rewards.action_rate_l2.weight = -0.02
         # self.rewards.smoothness_2.weight = -0.0075
 
         self.rewards.base_height_l2.weight = -10.0
@@ -112,9 +112,14 @@ class DeeproboticsLite3RoughEnvCfg(LocomotionVelocityRoughEnvCfg):
         self.rewards.stand_still.weight = -0.3
         self.rewards.stand_still.params["asset_cfg"].joint_names = self.joint_names
         self.rewards.stand_still.params["command_threshold"] = 0.2
-        self.rewards.feet_height_body.weight = -5.0
+        self.rewards.feet_height_body.weight = -2.5
         self.rewards.feet_height_body.params["target_height"] = -0.35
         self.rewards.feet_height_body.params["asset_cfg"].body_names = [self.foot_link_name]
+        self.rewards.feet_height.weight = -0.2
+        self.rewards.feet_height.params["asset_cfg"].body_names = [self.foot_link_name]
+        self.rewards.feet_height.params["target_height"] = 0.05
+        self.rewards.contact_forces.weight = -1e-2
+        self.rewards.contact_forces.params["sensor_cfg"].body_names = [self.foot_link_name]
 
         self.rewards.lin_vel_z_l2.weight = -2.0
         self.rewards.ang_vel_xy_l2.weight = -0.05
