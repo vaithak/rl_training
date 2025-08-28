@@ -504,7 +504,7 @@ class RewardsCfg:
     )
     action_rate_l2 = RewTerm(func=mdp.action_rate_l2, weight=0.0)
     # smoothness_1 = RewTerm(func=mdp.smoothness_1, weight=0.0)  # Same as action_rate_l2
-    smoothness_2 = RewTerm(func=mdp.smoothness_2, weight=0.0)  # Unvaliable now
+    # smoothness_2 = RewTerm(func=mdp.smoothness_2, weight=0.0)  # Unvaliable now
 
     # Contact sensor
     undesired_contacts = RewTerm(
