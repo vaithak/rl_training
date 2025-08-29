@@ -111,7 +111,7 @@ class DeeproboticsLite3RoughEnvCfg(LocomotionVelocityRoughEnvCfg):
         self.rewards.feet_slide.params["asset_cfg"].body_names = [self.foot_link_name]
         self.rewards.stand_still.weight = -0.3
         self.rewards.stand_still.params["asset_cfg"].joint_names = self.joint_names
-        self.rewards.stand_still.params["command_threshold"] = 0.2
+        self.rewards.stand_still.params["command_threshold"] = 0.1
         self.rewards.feet_height_body.weight = -2.5
         self.rewards.feet_height_body.params["target_height"] = -0.35
         self.rewards.feet_height_body.params["asset_cfg"].body_names = [self.foot_link_name]

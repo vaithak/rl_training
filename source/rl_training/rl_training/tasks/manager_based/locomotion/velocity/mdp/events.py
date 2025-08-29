@@ -161,7 +161,7 @@ def _randomize_prop_by_op(
     # -- dim 0
     if dim_0_ids is None:
         n_dim_0 = data.shape[0]
-        dim_0_ids = slice(None)
+        dim_0_ids = slice(None) # type: ignore
     else:
         n_dim_0 = len(dim_0_ids)
         if not isinstance(dim_1_ids, slice):
@@ -197,8 +197,9 @@ def _randomize_prop_by_op(
         )
     return data
 
+
 def bad_orientation_2(
-    env: ManagerBasedRLEnv, asset_cfg: SceneEntityCfg = SceneEntityCfg("robot")
+    env: ManagerBasedRLEnv, asset_cfg: SceneEntityCfg = SceneEntityCfg("robot") # type: ignore
 ) -> torch.Tensor:
     """Terminate when the asset's orientation is too far from the desired orientation limits.
 
