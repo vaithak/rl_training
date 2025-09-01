@@ -86,8 +86,6 @@ class DeeproboticsLite3RoughEnvCfg(LocomotionVelocityRoughEnvCfg):
         self.events.randomize_push_robot = None
         self.events.randomize_actuator_gains.params["asset_cfg"].joint_names = self.joint_names
 
-        # self.events.randomize_apply_external_force_torque.params["force_range"] = (-10.0, 10.0)
-        # self.events.randomize_apply_external_force_torque.params["torque_range"] = (-5.0, 5.0)
         # scale down the terrains because the robot is small
         self.scene.terrain.terrain_generator.sub_terrains["boxes"].grid_height_range = (0.025, 0.1)
         self.scene.terrain.terrain_generator.sub_terrains["random_rough"].noise_range = (0.01, 0.06)
