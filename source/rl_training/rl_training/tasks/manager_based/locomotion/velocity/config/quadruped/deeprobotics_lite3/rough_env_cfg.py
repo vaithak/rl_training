@@ -46,8 +46,8 @@ class DeeproboticsLite3RoughEnvCfg(LocomotionVelocityRoughEnvCfg):
         self.scene.height_scanner.pattern_cfg.resolution = 0.07 #  = GridPatternCfg(resolution=0.07, size=[1.6, 1.0]),
 
         # ------------------------------Observations------------------------------
-        self.observations.policy.base_lin_vel = None
-        self.observations.policy.height_scan = None
+        self.observations.policy.base_lin_vel = None # type: ignore
+        self.observations.policy.height_scan = None # type: ignore
         self.observations.policy.base_ang_vel.scale = 0.25
         self.observations.policy.joint_pos.scale = 1.0
         self.observations.policy.joint_vel.scale = 0.05
