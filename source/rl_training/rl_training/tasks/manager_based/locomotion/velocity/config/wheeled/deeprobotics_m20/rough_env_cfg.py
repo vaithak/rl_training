@@ -1,6 +1,3 @@
-# Copyright (c) 2025 Deep Robotics
-# SPDX-License-Identifier: BSD 3-Clause
-
 # Copyright (c) 2024-2025 Ziqi Fan
 # SPDX-License-Identifier: Apache-2.0
 
@@ -8,8 +5,8 @@ from isaaclab.managers import RewardTermCfg as RewTerm
 from isaaclab.managers import SceneEntityCfg
 from isaaclab.utils import configclass
 
-import rl_training.tasks.manager_based.locomotion.velocity.mdp as mdp
-from rl_training.tasks.manager_based.locomotion.velocity.velocity_env_cfg import (
+import robot_lab.tasks.manager_based.locomotion.velocity.mdp as mdp
+from robot_lab.tasks.manager_based.locomotion.velocity.velocity_env_cfg import (
     ActionsCfg,
     LocomotionVelocityRoughEnvCfg,
     RewardsCfg,
@@ -18,7 +15,7 @@ from rl_training.tasks.manager_based.locomotion.velocity.velocity_env_cfg import
 ##
 # Pre-defined configs
 ##
-from rl_training.assets.deeprobotics import DEEPROBOTICS_M20_CFG  # isort: skip
+from robot_lab.assets.deeprobotics import DEEPROBOTICS_M20_CFG  # isort: skip
 
 
 @configclass
@@ -127,7 +124,10 @@ class DeeproboticsM20RoughEnvCfg(LocomotionVelocityRoughEnvCfg):
                 "yaw": (-0.5, 0.5),
             },
         }
-        self.events.randomize_rigid_body_mass.params["asset_cfg"].body_names = [self.base_link_name]
+        self.events.randomize_rigid_body_mass_base.params["asset_cfg"].body_names = [self.base_link_name]
+        self.events.randomize_rigid_body_mass_others.params["asset_cfg"].body_names = [
+            f"^(?!.*{self.base_link_name}).*"
+        ]
         self.events.randomize_com_positions.params["asset_cfg"].body_names = [self.base_link_name]
         self.events.randomize_apply_external_force_torque.params["asset_cfg"].body_names = [self.base_link_name]
 
@@ -165,8 +165,8 @@ class DeeproboticsM20RoughEnvCfg(LocomotionVelocityRoughEnvCfg):
         self.rewards.joint_vel_limits.params["asset_cfg"].joint_names = self.wheel_joint_names
         self.rewards.joint_power.weight = -2e-5
         self.rewards.joint_power.params["asset_cfg"].joint_names = self.leg_joint_names
-        self.rewards.stand_still_without_cmd.weight = -2.0
-        self.rewards.stand_still_without_cmd.params["asset_cfg"].joint_names = self.leg_joint_names
+        self.rewards.stand_still.weight = -2.0
+        self.rewards.stand_still.params["asset_cfg"].joint_names = self.leg_joint_names
         self.rewards.joint_pos_penalty.weight = -1.0
         self.rewards.joint_pos_penalty.params["asset_cfg"].joint_names = self.leg_joint_names
         self.rewards.wheel_vel_penalty.weight = 0
@@ -227,6 +227,6 @@ class DeeproboticsM20RoughEnvCfg(LocomotionVelocityRoughEnvCfg):
         self.curriculum.command_levels = None
 
         # ------------------------------Commands------------------------------
-        self.commands.base_velocity.ranges.lin_vel_x = (-4.0, 4.0)
+        # self.commands.base_velocity.ranges.lin_vel_x = (-1.5, 1.5)
         # self.commands.base_velocity.ranges.lin_vel_y = (-1.0, 1.0)
         # self.commands.base_velocity.ranges.ang_vel_z = (-1.5, 1.5)

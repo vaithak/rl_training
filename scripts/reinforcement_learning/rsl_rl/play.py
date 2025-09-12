@@ -186,13 +186,13 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
     export_model_dir = os.path.join(os.path.dirname(resume_path), "exported")
     export_policy_as_onnx(
         policy=policy_nn,
-        normalizer=ppo_runner.obs_normalizer,
+        normalizer=None,
         path=export_model_dir,
         filename="policy.onnx",
     )
     export_policy_as_jit(
         policy=policy_nn,
-        normalizer=ppo_runner.obs_normalizer,
+        normalizer=None,
         path=export_model_dir,
         filename="policy.pt",
     )
