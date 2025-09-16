@@ -200,7 +200,8 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
     dt = env.unwrapped.step_dt
     # print(dt, "dt")
     # reset environment
-    obs, _ = env.get_observations()
+    
+    obs = torch.zeros(10, 45, device=env.device)
     timestep = 0
     # simulate environment
     while simulation_app.is_running():
