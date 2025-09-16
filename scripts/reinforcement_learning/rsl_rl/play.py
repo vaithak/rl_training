@@ -201,7 +201,8 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
     # print(dt, "dt")
     # reset environment
     
-    obs = torch.zeros(10, 45, device=env.device)
+    obs = env.get_observations()
+    
     timestep = 0
     # simulate environment
     while simulation_app.is_running():
@@ -210,7 +211,7 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
         with torch.inference_mode():
             # agent stepping
             actions = policy(obs)
-            # actions = torch.zeros_like(actions)
+
             # env stepping
             obs, _, _, _ = env.step(actions)
         if args_cli.video:
