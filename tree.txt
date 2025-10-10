@@ -34,7 +34,7 @@
 │       │           │   │   ├── hl_thigh.STL
 │       │           │   │   ├── hr_hip.STL
 │       │           │   │   ├── hr_shank_collision.STL
-│       │           │   │   ├── hr_shank.STL
+│       │           │   │   ├── hr_shank.STLS
 │       │           │   │   ├── hr_thigh.STL
 │       │           │   │   └── torso.STL
 │       │           │   └── urdf
