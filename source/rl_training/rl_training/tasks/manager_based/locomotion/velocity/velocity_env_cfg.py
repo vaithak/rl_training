@@ -661,7 +661,7 @@ class TerminationsCfg:
     # command_resample
     terrain_out_of_bounds = DoneTerm(
         func=mdp.terrain_out_of_bounds,
-        params={"asset_cfg": SceneEntityCfg("robot"), "distance_buffer": 3.0},
+        params={"asset_cfg": SceneEntityCfg("robot"), "distance_buffer": 8.0},
         time_out=True,
     )
 

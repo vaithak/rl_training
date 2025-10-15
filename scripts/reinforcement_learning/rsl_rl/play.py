@@ -90,14 +90,20 @@ class ObservationLogger:
     def __init__(self, env, csv_filename="policy_observations.csv"):
         self.env = env
         self.obs_manager = env.unwrapped.observation_manager
-        self.csv_filename = csv_filename
-        self.csv_file = None
-        self.csv_writer = None
-        self.start_time = time.time()
-        self.header_written = False
+        self.csv_filename_prefix = csv_filename.replace('.csv', '')  # Remove .csv extension if present
+        self.num_envs = env.unwrapped.num_envs
 
-        # Open CSV file
-        self.csv_file = open(self.csv_filename, 'w', newline='')
+        # Track CSV files and writers for each environment
+        self.csv_files = {}
+        self.csv_writers = {}
+        self.header_written = {}
+
+        # Initialize CSV file for each environment
+        for env_id in range(self.num_envs):
+            filename = f"{self.csv_filename_prefix}_env_{env_id}.csv"
+            self.csv_files[env_id] = open(filename, 'w', newline='')
+            self.csv_writers[env_id] = None
+            self.header_written[env_id] = False
 
     def _get_column_names(self, group_name, term_names, term_dims, is_concatenated):
         """Generate column names for CSV header"""
@@ -134,53 +140,56 @@ class ObservationLogger:
         # Check if the terms are concatenated into a single tensor
         is_concatenated = self.obs_manager.group_obs_concatenate[group_name]
 
-        # Write header if first time
-        if not self.header_written:
-            columns = self._get_column_names(group_name, term_names, term_dims, is_concatenated)
-            self.csv_writer = csv.DictWriter(self.csv_file, fieldnames=columns)
-            self.csv_writer.writeheader()
-            self.header_written = True
+        # Log data for each environment
+        for env_id in range(self.num_envs):
+            # Write header if first time for this environment
+            if not self.header_written[env_id]:
+                columns = self._get_column_names(group_name, term_names, term_dims, is_concatenated)
+                self.csv_writers[env_id] = csv.DictWriter(self.csv_files[env_id], fieldnames=columns)
+                self.csv_writers[env_id].writeheader()
+                self.header_written[env_id] = True
 
-        # Prepare row data
-        row = {}
-        row["timestamp"] = time.time() - self.start_time
-        row["dt"] = self.env.unwrapped.step_dt
+            # Prepare row data
+            row = {}
+            row["timestamp"] = time.time()
+            row["dt"] = self.env.unwrapped.step_dt
 
-        if is_concatenated:
-            # If concatenated, we need to manually split the tensor based on term dimensions
-            start_idx = 0
-            for name, dim in zip(term_names, term_dims):
-                # The dimensions are for a single environment, so we need to account for batch size
-                end_idx = start_idx + dim[0]
-                term_obs = group_data[0, start_idx:end_idx]  # Use first environment (index 0)
+            if is_concatenated:
+                # If concatenated, we need to manually split the tensor based on term dimensions
+                start_idx = 0
+                for name, dim in zip(term_names, term_dims):
+                    # The dimensions are for a single environment, so we need to account for batch size
+                    end_idx = start_idx + dim[0]
+                    term_obs = group_data[env_id, start_idx:end_idx]
 
-                if dim[0] == 1:
-                    # Single value
-                    row[name] = term_obs[0].item()
-                else:
-                    # Multiple values
-                    for i, val in enumerate(term_obs):
-                        row[f"{name}_{i}"] = val.item()
+                    if dim[0] == 1:
+                        # Single value
+                        row[name] = term_obs[0].item()
+                    else:
+                        # Multiple values
+                        for i, val in enumerate(term_obs):
+                            row[f"{name}_{i}"] = val.item()
 
-                start_idx = end_idx
-        else:
-            # If not concatenated, the observation group is a dictionary
-            for name, term_obs in group_data.items():
-                if term_obs.shape[1] == 1:
-                    # Single value
-                    row[name] = term_obs[0, 0].item()
-                else:
-                    # Multiple values
-                    for i in range(term_obs.shape[1]):
-                        row[f"{name}_{i}"] = term_obs[0, i].item()
+                    start_idx = end_idx
+            else:
+                # If not concatenated, the observation group is a dictionary
+                for name, term_obs in group_data.items():
+                    if term_obs.shape[1] == 1:
+                        # Single value
+                        row[name] = term_obs[env_id, 0].item()
+                    else:
+                        # Multiple values
+                        for i in range(term_obs.shape[1]):
+                            row[f"{name}_{i}"] = term_obs[env_id, i].item()
 
-        # Write row to CSV
-        self.csv_writer.writerow(row)
+            # Write row to CSV
+            self.csv_writers[env_id].writerow(row)
 
     def close(self):
-        """Close the CSV file"""
-        if self.csv_file:
-            self.csv_file.close()
+        """Close all CSV files"""
+        for env_id in range(self.num_envs):
+            if env_id in self.csv_files and self.csv_files[env_id]:
+                self.csv_files[env_id].close()
 
 
 @hydra_task_config(args_cli.task, args_cli.agent)
