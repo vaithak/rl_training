@@ -41,7 +41,7 @@ parser.add_argument(
 )
 parser.add_argument("--real-time", action="store_true", default=False, help="Run in real-time, if possible.")
 parser.add_argument("--keyboard", action="store_true", default=False, help="Whether to use keyboard.")
-parser.add_argument("--obs_log_csv", type=str, default="policy_observations.csv", help="CSV filename for logging policy observations.")
+parser.add_argument("--obs_log_csv", type=str, default="critic_observations.csv", help="CSV filename for logging critic observations.")
 # append RSL-RL cli arguments
 cli_args.add_rsl_rl_args(parser)
 # append AppLauncher cli args
@@ -69,6 +69,7 @@ import torch
 from rsl_rl.runners import OnPolicyRunner
 
 from isaaclab.devices import Se2Keyboard, Se2KeyboardCfg
+from isaaclab.utils.math import matrix_from_quat
 from isaaclab.envs import (
     DirectMARLEnv,
     DirectMARLEnvCfg,
@@ -87,9 +88,10 @@ from isaaclab_tasks.utils.hydra import hydra_task_config
 import rl_training.tasks  # noqa: F401
 
 class ObservationLogger:
-    def __init__(self, env, csv_filename="policy_observations.csv"):
+    def __init__(self, env, csv_filename="critic_observations.csv"):
         self.env = env
         self.obs_manager = env.unwrapped.observation_manager
+        self.robot = env.unwrapped.scene["robot"]  # Access robot articulation
         self.csv_filename_prefix = csv_filename.replace('.csv', '')  # Remove .csv extension if present
         self.num_envs = env.unwrapped.num_envs
 
@@ -109,6 +111,14 @@ class ObservationLogger:
         """Generate column names for CSV header"""
         columns = ["timestamp", "dt"]
 
+        # Add base position columns (x, y, z)
+        columns.extend(["base_pos_x", "base_pos_y", "base_pos_z"])
+
+        # Add rotation matrix columns (3x3 matrix, flattened row-major)
+        for i in range(3):
+            for j in range(3):
+                columns.append(f"base_rot_{i}{j}")
+
         for name, dim in zip(term_names, term_dims):
             if dim[0] == 1:
                 # Single dimension - just use the term name
@@ -121,14 +131,14 @@ class ObservationLogger:
         return columns
 
     def log_observations(self):
-        """Log policy observations to CSV as time-series data"""
+        """Log critic observations to CSV as time-series data"""
         observations = self.obs_manager.compute()
 
-        # Only log the "policy" group
-        if "policy" not in observations:
+        # Only log the "critic" group
+        if "critic" not in observations:
             return
 
-        group_name = "policy"
+        group_name = "critic"
         group_data = observations[group_name]
 
         # Get the shape of individual terms within the group
@@ -153,6 +163,21 @@ class ObservationLogger:
             row = {}
             row["timestamp"] = time.time()
             row["dt"] = self.env.unwrapped.step_dt
+
+            # Get base position (x, y, z) in world frame
+            base_pos = self.robot.data.root_pos_w[env_id]  # Shape: (3,)
+            row["base_pos_x"] = base_pos[0].item()
+            row["base_pos_y"] = base_pos[1].item()
+            row["base_pos_z"] = base_pos[2].item()
+
+            # Get base orientation quaternion and convert to rotation matrix
+            base_quat = self.robot.data.root_quat_w[env_id]  # Shape: (4,) [w, x, y, z]
+            base_rot_matrix = matrix_from_quat(base_quat.unsqueeze(0)).squeeze(0)  # Shape: (3, 3)
+
+            # Flatten rotation matrix row-major and add to row
+            for i in range(3):
+                for j in range(3):
+                    row[f"base_rot_{i}{j}"] = base_rot_matrix[i, j].item()
 
             if is_concatenated:
                 # If concatenated, we need to manually split the tensor based on term dimensions
